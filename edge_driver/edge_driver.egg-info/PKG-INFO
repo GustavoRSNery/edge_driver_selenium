@@ -1,0 +1,53 @@
+Metadata-Version: 2.2
+Name: edge_driver
+Version: 1.0.0
+Summary: Um módulo para automatização usando Edge WebDriver
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+Requires-Dist: selenium>=4.0.0
+Requires-Dist: Pillow>=8.0.0
+Requires-Dist: opencv-python>=4.5.0
+Requires-Dist: pandas>=1.0.0
+Requires-Dist: numpy>=1.18.0
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# pip install -e C:\Projetos\edge_driver
+
+# Exemplo de uso...........................
+
+    from edge_driver import EdgeDriverConfig, AutomacaoSelenium, DriverNotFoundException # type: ignore
+
+    def test_edge_driver():
+        try:
+            # Inicializando o EdgeDriverConfig
+            config = EdgeDriverConfig(headless=False, inprivate=True, window_size=(1920, 1080))
+            print("ConfiguraÃ§Ã£o inicializada com sucesso.")
+
+            # Criando o driver
+            driver = config.create_driver()
+            print("Driver criado com sucesso.")
+
+            # Usando AutomacaoSelenium
+            AS = AutomacaoSelenium(driver, wait=60)
+            print("AutomaÃ§Ã£o iniciada com sucesso.")
+
+            # Realizar uma operaÃ§Ã£o simples no navegador
+            driver.get("https://www.google.com")
+            print("PÃ¡gina carregada com sucesso!")
+
+            # Fechar o navegador apÃ³s o teste
+            driver.quit()
+            print("Navegador fechado com sucesso.")
+
+        except DriverNotFoundException as e:
+            print(f"Erro: {e.message}")
+        except Exception as e:
+            print(f"Ocorreu um erro: {str(e)}")
+
+    # Executar o teste
+    if __name__ == "__main__":
+        test_edge_driver()
