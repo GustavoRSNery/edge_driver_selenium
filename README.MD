@@ -1,4 +1,3 @@
-# pip install -e C:\Projetos\edge_driver
 
 # Exemplo de uso...........................
 
