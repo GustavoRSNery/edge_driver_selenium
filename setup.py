@@ -2,10 +2,10 @@ from setuptools import setup, find_packages  # type: ignore
 
 setup(
     # Nome do pacote
-    name='edge_driver',
+    name='edge_driver_selenium',
     
     # Versão do pacote
-    version='1.0.0',
+    version='0.1.0',
     
     # Descrição curta
     description='Um módulo para automatização usando Edge WebDriver',
@@ -26,15 +26,13 @@ setup(
     python_requires='>=3.7',
     
     # Leitura do README para descrição longa
+    description="Uma breve descrição do projeto",
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     
     # Informações do autor
     author='Gustavo Nery',
     author_email='gustavorsnery@gmail.com',
-    description="Uma breve descrição do projeto",
-    long_description=open("README.md").read(),
-    long_description_content_type="text/markdown",
     
     # URL do repositório
     url='https://github.com/GustavoRSNery/edge_driver_selenium',
