@@ -142,7 +142,7 @@ automacao.clicar_icone("caminho/icone.png")
 ### Exemplo 1:
 
 ```python
-from config import EdgeDriverConfig, AutomacaoSelenium
+from edge_driver import *
 
 driver_config = EdgeDriverConfig(headless=False, inprivate=True, start_maximized=True)
 driver = driver_config.create_driver()
@@ -161,7 +161,7 @@ automacao.voltar_para_iframe_pai()
 ### Exemplo 2:
 
 ```python
-from edge_driver import EdgeDriverConfig, AutomacaoSelenium, DriverNotFoundException
+from edge_driver import *
 
     def test_edge_driver():
         try:
