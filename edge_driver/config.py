@@ -220,21 +220,3 @@ class AutomacaoSelenium:
         else:
             print("Ícone não encontrado.")
 
-        # from selenium import webdriver
-
-        # # Inicialize o WebDriver
-        # driver = webdriver.Edge()
-
-        # # Crie uma instância da classe AutomacaoSelenium
-        # automacao = AutomacaoSelenium(driver)
-
-        # # Exemplo de uso para trocar para um iframe
-        # automacao.trocar_iframe(20, '//*[@handle="HOME-PAGE[unique=true]"]')
-
-        # # Exemplo de uso para aguardar um elemento e clicar
-        # elemento = automacao.aguardar_elemento_clicavel(20, '/html/body/div/div/div[2]/div[2]/div/div/div/div[2]/div[1]/div[2]/div[1]/div/div[1]/div[2]/div[5]/div')
-        # if elemento:
-        #     elemento.click()
-
-        # # Exemplo de uso para clicar em um ícone usando OpenCV
-        # automacao.clicar_icone(r'C:\PythonProjects\EdgeDriver\CV\botao_modulo.png')

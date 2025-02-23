@@ -32,6 +32,9 @@ setup(
     # Informações do autor
     author='Gustavo Nery',
     author_email='gustavorsnery@gmail.com',
+    description="Uma breve descrição do projeto",
+    long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
     
     # URL do repositório
     url='https://github.com/GustavoRSNery/edge_driver_selenium',
