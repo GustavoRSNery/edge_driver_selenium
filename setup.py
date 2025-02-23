@@ -8,7 +8,7 @@ setup(
     version='0.1.0',
     
     # Descrição curta
-    description='Um módulo para automatização usando Edge WebDriver',
+    short_description='Um módulo para automatização usando Edge WebDriver',
     
     # Detecta automaticamente os pacotes
     packages=find_packages(where='.'),
