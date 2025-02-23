@@ -163,41 +163,33 @@ automacao.voltar_para_iframe_pai()
 ```python
 from edge_driver import EdgeDriverConfig, AutomacaoSelenium, DriverNotFoundException
 
-def test_edge_driver():
-    try:
-        # Inicializando o EdgeDriverConfig
-        config = EdgeDriverConfig(headless=False, inprivate=True, window_size=(1920, 1080))
-        print("Configuração inicializada com sucesso.")
+    def test_edge_driver():
+        try:
+            # Inicializando o EdgeDriverConfig
+            config = EdgeDriverConfig(headless=False, inprivate=True, window_size=(1920, 1080))
+            print("Configuração inicializada com sucesso.")
 
-        # Criando o driver
-        driver = config.create_driver()
-        print("Driver criado com sucesso.")
+            # Criando o driver
+            driver = config.create_driver()
+            print("Driver criado com sucesso.")
 
-        # Usando AutomacaoSelenium
-        AS = AutomacaoSelenium(driver, wait=60)
-        print("Automação iniciada com sucesso.")
+            # Usando AutomacaoSelenium
+            AS = AutomacaoSelenium(driver, wait=60)
+            print("Automação iniciada com sucesso.")
 
-        # Realizar uma operação simples no navegador
-        driver.get("https://www.google.com")
-        print("Página carregada com sucesso!")
+            # Realizar uma operação simples no navegador
+            driver.get("https://www.google.com")
+            print("Página carregada com sucesso!")
 
-        # Fechar o navegador após o teste
-        driver.quit()
-        print("Navegador fechado com sucesso.")
+            # Fechar o navegador após o teste
+            driver.quit()
+            print("Navegador fechado com sucesso.")
 
-    except DriverNotFoundException as e:
-        print(f"Erro: {e.message}")
-    except Exception as e:
-        print(f"Ocorreu um erro: {str(e)}")
+        except DriverNotFoundException as e:
+            print(f"Erro: {e.message}")
+        except Exception as e:
+            print(f"Ocorreu um erro: {str(e)}")
 
-# Executar o teste
-if __name__ == "__main__":
-    test_edge_driver()
-```
-
----
-
-## Conclusão
-
-Essa biblioteca oferece funcionalidades essenciais para automação de tarefas no navegador, incluindo manipulação de elementos, extração de dados e reconhecimento de imagens, otimizando fluxos de trabalho automatizados.
-
+    # Executar o teste
+    if __name__ == "__main__":
+        test_edge_driver()
