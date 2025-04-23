@@ -11,7 +11,9 @@ Esta biblioteca fornece uma interface para automação de tarefas no navegador M
 Antes de utilizar a biblioteca, instale as dependências necessárias:
 
 ```bash
-pip install selenium pillow opencv-python numpy pandas
+git clone https://github.com/GustavoRSNery/edge_driver_selenium.git
+cd edge_driver_selenium
+pip install .
 ```
 
 Certifique-se de que o Microsoft Edge WebDriver está instalado e configurado corretamente no sistema.
