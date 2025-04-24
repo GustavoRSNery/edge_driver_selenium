@@ -1,0 +1,11 @@
+LICENSE
+README.md
+setup.py
+edge_driver/__init__.py
+edge_driver/config.py
+edge_driver/exceptions.py
+edge_driver_selenium.egg-info/PKG-INFO
+edge_driver_selenium.egg-info/SOURCES.txt
+edge_driver_selenium.egg-info/dependency_links.txt
+edge_driver_selenium.egg-info/requires.txt
+edge_driver_selenium.egg-info/top_level.txt

@@ -1,0 +1,228 @@
+Metadata-Version: 2.4
+Name: edge_driver_selenium
+Version: 0.1.0
+Summary: Uma breve descrição do projeto
+Home-page: https://github.com/GustavoRSNery/edge_driver_selenium
+Author: Gustavo Nery
+Author-email: gustavorsnery@gmail.com
+License: MIT
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: selenium>=4.0.0
+Requires-Dist: Pillow>=8.0.0
+Requires-Dist: opencv-python>=4.5.0
+Requires-Dist: pandas>=1.0.0
+Requires-Dist: numpy>=1.18.0
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license
+Dynamic: license-file
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# AutomacaoSelenium
+
+## VisÃ£o Geral
+
+Esta biblioteca fornece uma interface para automaÃ§Ã£o de tarefas no navegador Microsoft Edge utilizando Selenium. Inclui funcionalidades para interaÃ§Ã£o com elementos da pÃ¡gina, manipulaÃ§Ã£o de iframes, extraÃ§Ã£o de dados e reconhecimento de imagens para automaÃ§Ã£o visual.
+
+---
+
+## InstalaÃ§Ã£o
+
+Antes de utilizar a biblioteca, instale as dependÃªncias necessÃ¡rias:
+
+```bash
+git clone https://github.com/GustavoRSNery/edge_driver_selenium.git
+cd edge_driver_selenium
+pip install .
+```
+
+Certifique-se de que o Microsoft Edge WebDriver estÃ¡ instalado e configurado corretamente no sistema.
+
+---
+
+## ConfiguraÃ§Ã£o do WebDriver
+
+A classe `EdgeDriverConfig` configura e instancia um WebDriver do Edge.
+
+### Exemplo de Uso:
+
+```python
+from config import EdgeDriverConfig
+
+driver_config = EdgeDriverConfig(headless=False, inprivate=True, start_maximized=True, log_level=3)
+driver = driver_config.create_driver()
+```
+
+### ParÃ¢metros:
+
+- `headless` (bool): Executa o navegador em modo headless (sem interface grÃ¡fica).
+- `inprivate` (bool): Inicia o navegador no modo InPrivate.
+- `start_maximized` (bool): Inicia o navegador maximizado.
+- `log_level` (int): Define o nÃ­vel de log do navegador.
+- `window_size` (tuple): Define o tamanho da janela `(largura, altura)`, opcional.
+
+---
+
+## Classe `AutomacaoSelenium`
+
+A classe `AutomacaoSelenium` encapsula mÃ©todos para facilitar a interaÃ§Ã£o com o Selenium.
+
+### InicializaÃ§Ã£o:
+
+```python
+from config import AutomacaoSelenium
+
+automacao = AutomacaoSelenium(driver, wait=20)
+```
+
+- `driver`: InstÃ¢ncia do WebDriver.
+- `wait` (int): Tempo mÃ¡ximo de espera para carregamento de elementos.
+
+---
+
+## MÃ©todos DisponÃ­veis
+
+### 1. `aguardar_elemento(xpath, t=None)`
+
+Aguarda um elemento especÃ­fico estar visÃ­vel na pÃ¡gina.
+
+```python
+elemento = automacao.aguardar_elemento("//div[@id='meuElemento']")
+```
+
+- `xpath` (str): LocalizaÃ§Ã£o do elemento.
+- `t` (int, opcional): Tempo mÃ¡ximo de espera.
+
+---
+
+### 2. `trocar_iframe(xpath)`
+
+Troca o contexto para um iframe especÃ­fico.
+
+```python
+automacao.trocar_iframe("//iframe[@id='meuIframe']")
+```
+
+---
+
+### 3. `voltar_para_iframe_pai(niveis=1)`
+
+Sai do iframe atual e retorna ao pai.
+
+```python
+automacao.voltar_para_iframe_pai(niveis=2)
+```
+
+- `niveis` (int): NÃºmero de nÃ­veis a retornar.
+
+---
+
+### 4. `aguardar_elemento_clicavel(xpath)`
+
+Aguarda atÃ© que um elemento esteja pronto para ser clicado.
+
+```python
+elemento = automacao.aguardar_elemento_clicavel("//button[@id='meuBotao']")
+```
+
+---
+
+### 5. `extrair_dados_div_para_tabela(div_principal_xpath)`
+
+Extrai informaÃ§Ãµes de uma div estruturada como tabela.
+
+```python
+df = automacao.extrair_dados_div_para_tabela("//div[@class='tabelaDados']")
+```
+
+- Retorna um `pandas.DataFrame` com os dados extraÃ­dos.
+
+---
+
+### 6. `find_image(screenshot, template_path)`
+
+Encontra uma imagem especÃ­fica dentro de uma captura de tela.
+
+```python
+location, size = automacao.find_image(screenshot, "caminho/template.png")
+```
+
+---
+
+### 7. `clicar_icone(template_path)`
+
+Captura a tela e clica automaticamente em um Ã­cone especÃ­fico.
+
+```python
+automacao.clicar_icone("caminho/icone.png")
+```
+
+---
+
+## Exemplos de Uso
+
+### Exemplo 1:
+
+```python
+from edge_driver import *
+
+driver_config = EdgeDriverConfig(headless=False, inprivate=True, start_maximized=True)
+driver = driver_config.create_driver()
+
+automacao = AutomacaoSelenium(driver)
+
+elemento = automacao.aguardar_elemento("//button[@id='submit']")
+if elemento:
+    elemento.click()
+
+automacao.trocar_iframe("//iframe[@id='conteudo']")
+
+automacao.voltar_para_iframe_pai()
+```
+
+### Exemplo 2:
+
+```python
+from edge_driver import *
+
+    def test_edge_driver():
+        try:
+            # Inicializando o EdgeDriverConfig
+            config = EdgeDriverConfig(headless=False, inprivate=True, window_size=(1920, 1080))
+            print("ConfiguraÃ§Ã£o inicializada com sucesso.")
+
+            # Criando o driver
+            driver = config.create_driver()
+            print("Driver criado com sucesso.")
+
+            # Usando AutomacaoSelenium
+            AS = AutomacaoSelenium(driver, wait=60)
+            print("AutomaÃ§Ã£o iniciada com sucesso.")
+
+            # Realizar uma operaÃ§Ã£o simples no navegador
+            driver.get("https://www.google.com")
+            print("PÃ¡gina carregada com sucesso!")
+
+            # Fechar o navegador apÃ³s o teste
+            driver.quit()
+            print("Navegador fechado com sucesso.")
+
+        except DriverNotFoundException as e:
+            print(f"Erro: {e.message}")
+        except Exception as e:
+            print(f"Ocorreu um erro: {str(e)}")
+
+    # Executar o teste
+    if __name__ == "__main__":
+        test_edge_driver()

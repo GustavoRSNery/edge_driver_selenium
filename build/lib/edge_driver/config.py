@@ -11,7 +11,6 @@ import selenium.webdriver as webdriver
 # Manipulação de arquivos e imagens
 from io import BytesIO
 from PIL import Image, ImageTk, ImageSequence
-import pyautogui
 import cv2
 
 # Manipulação de dados
@@ -164,62 +163,60 @@ class AutomacaoSelenium:
             print(f"ERRO: ao extrair dados da div para tabela: {e}")
             return None
 
-    # Abaixo funções sobre imagens. vvv
-    def find_image(screenshot, template_path):
+ # Abaixo funções sobre imagens. vvv
+    def find_image(self, screenshot, template_path):
         """Encontra a imagem do template no screenshot usando OpenCV."""
+        # Carregue a imagem do template
         template = cv2.imread(template_path)
         if template is None:
             raise ValueError(f"Não foi possível ler a imagem do template: {template_path}")
 
         print(f"Tipo de template: {type(template)}, Forma: {template.shape}")
 
-        w, h = template.shape[1], template.shape[0]
+        # Verifique se a imagem é colorida ou em escala de cinza
+        if len(template.shape) == 3:  # Colorida
+            w, h = template.shape[1], template.shape[0]
+        elif len(template.shape) == 2:  # Escala de cinza
+            w, h = template.shape[1], template.shape[0]
+        else:
+            raise ValueError("A imagem do template tem um formato inesperado.")
 
-        # Converter imagens para escala de cinza
-        screenshot_gray = cv2.cvtColor(screenshot, cv2.COLOR_BGR2GRAY) if len(screenshot.shape) == 3 else screenshot
-        template_gray = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY) if len(template.shape) == 3 else template
+        # Converta o screenshot para o formato esperado
+        if len(screenshot.shape) == 3:
+            screenshot = cv2.cvtColor(screenshot, cv2.COLOR_BGR2GRAY)
+        else:
+            screenshot = cv2.cvtColor(screenshot, cv2.COLOR_GRAY2RGB)
 
-        result = cv2.matchTemplate(screenshot_gray, template_gray, cv2.TM_CCOEFF_NORMED)
-        _, max_val, _, max_loc = cv2.minMaxLoc(result)
+        # Verifique as dimensões do template
+        if len(template.shape) == 3:
+            template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
 
-        return max_loc, (w, h), max_val
+        # Continue com a lógica para encontrar a imagem
+        result = cv2.matchTemplate(screenshot, template, cv2.TM_CCOEFF_NORMED)
+        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
 
-def find_image(screenshot, template_path):
-    """Encontra a imagem do template no screenshot usando OpenCV."""
-    template = cv2.imread(template_path)
-    if template is None:
-        raise ValueError(f"Não foi possível ler a imagem do template: {template_path}")
+        return max_loc, (w, h)
 
-    print(f"Tipo de template: {type(template)}, Forma: {template.shape}")
+    def clicar_icone(self, template_path):
+        """Captura a tela e clica no ícone encontrado."""
+        # Captura da tela
+        screenshot = self.driver.get_screenshot_as_png()
+        screenshot = Image.open(BytesIO(screenshot))
+        screenshot = np.array(screenshot)
 
-    w, h = template.shape[1], template.shape[0]
+        # Encontrar o ícone
+        location, size = self.find_image(screenshot, template_path)
 
-    # Converter imagens para escala de cinza
-    screenshot_gray = cv2.cvtColor(screenshot, cv2.COLOR_BGR2GRAY) if len(screenshot.shape) == 3 else screenshot
-    template_gray = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY) if len(template.shape) == 3 else template
+        if location:
+            print(f"Ícone encontrado na posição: {location}, tamanho: {size}")
 
-    result = cv2.matchTemplate(screenshot_gray, template_gray, cv2.TM_CCOEFF_NORMED)
-    _, max_val, _, max_loc = cv2.minMaxLoc(result)
+            # Calcular a posição central do ícone para clicar
+            click_x = location[0] + size[0] // 2
+            click_y = location[1] + size[1] // 2
 
-    return max_loc, (w, h), max_val
-
-def clicar_icone(template_path, confianca_min=0.8):
-    """Captura a tela, procura o ícone e clica nele."""
-    screenshot = pyautogui.screenshot()
-    screenshot = np.array(screenshot)
-    screenshot = cv2.cvtColor(screenshot, cv2.COLOR_RGB2BGR)
-
-    max_loc, (w, h), confidence = find_image(screenshot, template_path)
-
-    print(f"[DEBUG] Confiança: {confidence:.2f}")
-    if confidence >= confianca_min:
-        center_x = max_loc[0] + w // 2
-        center_y = max_loc[1] + h // 2
-        pyautogui.moveTo(center_x, center_y, duration=0.2)
-        pyautogui.click()
-        print(f"[INFO] Clique realizado em: ({center_x}, {center_y})")
-        return True
-    else:
-        print("[WARN] Confiança insuficiente.")
-        return False
+            # Realizar o clique na posição ajustada usando JavaScript
+            self.driver.execute_script(f"window.scrollTo({click_x - 200}, {click_y - 200});")
+            self.driver.execute_script(f"document.elementFromPoint({click_x}, {click_y}).click();")
+        else:
+            print("Ícone não encontrado.")
 
