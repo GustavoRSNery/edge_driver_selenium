@@ -14,6 +14,7 @@ Antes de utilizar a biblioteca, instale as dependências necessárias:
 git clone https://github.com/GustavoRSNery/edge_driver_selenium.git
 cd edge_driver_selenium
 pip install .
+cd..
 ```
 
 Certifique-se de que o Microsoft Edge WebDriver está instalado e configurado corretamente no sistema.
@@ -139,59 +140,37 @@ automacao.clicar_icone("caminho/icone.png")
 
 ---
 
-## Exemplos de Uso
-
-### Exemplo 1:
-
+## Exemplo de Uso
 ```python
 from edge_driver import *
 
-driver_config = EdgeDriverConfig(headless=False, inprivate=True, start_maximized=True)
-driver = driver_config.create_driver()
+def test_edge_driver():
+    try:
+        # Inicializando o EdgeDriverConfig
+        config = EdgeDriverConfig(headless=False, inprivate=True, window_size=(1920, 1080))
+        print("Configuração inicializada com sucesso.")
 
-automacao = AutomacaoSelenium(driver)
+        # Criando o driver
+        driver = config.create_driver()
+        print("Driver criado com sucesso.")
 
-elemento = automacao.aguardar_elemento("//button[@id='submit']")
-if elemento:
-    elemento.click()
+        # Usando AutomacaoSelenium
+        AS = AutomacaoSelenium(driver, wait=60)
+        print("Automação iniciada com sucesso.")
 
-automacao.trocar_iframe("//iframe[@id='conteudo']")
+        # Realizar uma operação simples no navegador
+        driver.get("https://www.google.com")
+        print("Página carregada com sucesso!")
 
-automacao.voltar_para_iframe_pai()
-```
+        # Fechar o navegador após o teste
+        driver.quit()
+        print("Navegador fechado com sucesso.")
 
-### Exemplo 2:
+    except DriverNotFoundException as e:
+        print(f"Erro: {e.message}")
+    except Exception as e:
+        print(f"Ocorreu um erro: {str(e)}")
 
-```python
-from edge_driver import *
-
-    def test_edge_driver():
-        try:
-            # Inicializando o EdgeDriverConfig
-            config = EdgeDriverConfig(headless=False, inprivate=True, window_size=(1920, 1080))
-            print("Configuração inicializada com sucesso.")
-
-            # Criando o driver
-            driver = config.create_driver()
-            print("Driver criado com sucesso.")
-
-            # Usando AutomacaoSelenium
-            AS = AutomacaoSelenium(driver, wait=60)
-            print("Automação iniciada com sucesso.")
-
-            # Realizar uma operação simples no navegador
-            driver.get("https://www.google.com")
-            print("Página carregada com sucesso!")
-
-            # Fechar o navegador após o teste
-            driver.quit()
-            print("Navegador fechado com sucesso.")
-
-        except DriverNotFoundException as e:
-            print(f"Erro: {e.message}")
-        except Exception as e:
-            print(f"Ocorreu um erro: {str(e)}")
-
-    # Executar o teste
-    if __name__ == "__main__":
-        test_edge_driver()
+# Executar o teste
+if __name__ == "__main__":
+    test_edge_driver()
